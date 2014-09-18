@@ -1,7 +1,7 @@
-Robot-Base
+Camera-Bot
 ==========
 
-The bare mininum code needed to make the drivetrain move.
+Drivetrain with camera code.
 
 Branches
 ========
