@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.BasicRobot.RobotMap;
+import edu.wpi.first.wpilibj.Gyro;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -21,6 +22,9 @@ public class OI {
    // Define Joystick Buttons
    Button forwardButton = new JoystickButton (jRight,2);
    Button reverseButton = new JoystickButton (jRight,1);
+   
+   // Define Gyro
+   Gyro mainGyro = new Gyro(RobotMap.mainGyro);
    
     // Placeholder method. Does nothing yet.
     public boolean weAreDriving() {

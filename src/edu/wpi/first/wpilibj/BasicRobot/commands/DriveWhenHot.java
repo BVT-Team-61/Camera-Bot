@@ -31,7 +31,6 @@ public class DriveWhenHot extends CommandBase {
         } else {
             drivetrain.tankDrive(0.0, 0.0);
         }
-        Timer.delay(1);
     }
 
     // Make this return true when this Command no longer needs to run execute()

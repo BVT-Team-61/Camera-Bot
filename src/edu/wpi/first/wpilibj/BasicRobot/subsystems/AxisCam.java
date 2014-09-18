@@ -7,6 +7,7 @@ package edu.wpi.first.wpilibj.BasicRobot.subsystems;
 
 import edu.wpi.first.wpilibj.BasicRobot.util.TargetReport;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
+import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
@@ -90,10 +91,11 @@ public class AxisCam extends Subsystem {
              * "testImage.jpg"
              *
              */
-            //ColorImage image = camera.getImage();     // comment if using stored images
-            ColorImage image;                           // next 2 lines read image from flash on cRIO
-            image = new RGBImage("/testImage.jpg");		// get the sample image from the cRIO flash
-            BinaryImage thresholdImage = image.thresholdHSV(105, 137, 230, 255, 133, 183);   // keep only green objects
+            ColorImage image = camera.getImage();     // comment if using stored images
+            //ColorImage image;                           // next 2 lines read image from flash on cRIO
+            //image = new RGBImage("/testImage.jpg");		// get the sample image from the cRIO flash
+            //BinaryImage thresholdImage = image.thresholdHSV(105, 137, 230, 255, 133, 183);   // keep only green objects
+            BinaryImage thresholdImage = image.thresholdHSV(210, 250, 75, 100, 110, 140);
             //thresholdImage.write("/threshold.bmp");
             BinaryImage filteredImage = thresholdImage.particleFilter(cc);           // filter out small particles
             //filteredImage.write("/filteredImage.bmp");
@@ -191,8 +193,8 @@ public class AxisCam extends Subsystem {
             thresholdImage.free();
             image.free();
 
-//            } catch (AxisCameraException ex) {        // this is needed if the camera.getImage() is called
-//                ex.printStackTrace();
+           } catch (AxisCameraException ex) {        // this is needed if the camera.getImage() is called
+                ex.printStackTrace();
         } catch (NIVisionException ex) {
             ex.printStackTrace();
         }
@@ -304,7 +306,7 @@ public class AxisCam extends Subsystem {
     private boolean hotOrNot(TargetReport target) {
         boolean isHot = true;
 
-        isHot &= target.tapeWidthScore >= TAPE_WIDTH_LIMIT;
+        //isHot &= target.tapeWidthScore >= TAPE_WIDTH_LIMIT;
         isHot &= target.verticalScore >= VERTICAL_SCORE_LIMIT;
         isHot &= (target.leftScore > LR_SCORE_LIMIT) | (target.rightScore > LR_SCORE_LIMIT);
 
