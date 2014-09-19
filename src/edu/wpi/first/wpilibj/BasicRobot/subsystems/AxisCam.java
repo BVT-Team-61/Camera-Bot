@@ -95,7 +95,8 @@ public class AxisCam extends Subsystem {
             //ColorImage image;                           // next 2 lines read image from flash on cRIO
             //image = new RGBImage("/testImage.jpg");		// get the sample image from the cRIO flash
             //BinaryImage thresholdImage = image.thresholdHSV(105, 137, 230, 255, 133, 183);   // keep only green objects
-            BinaryImage thresholdImage = image.thresholdHSV(210, 250, 75, 100, 110, 140);
+            BinaryImage thresholdImage = image.thresholdHSV(210, 250, 75, 100, 110, 140);  // Red objects (bumpers?)
+            //BinaryImage thresholdImage = image.thresholdHSV(80, 160, 200, 255, 200, 255); // Better Bumpers
             //thresholdImage.write("/threshold.bmp");
             BinaryImage filteredImage = thresholdImage.particleFilter(cc);           // filter out small particles
             //filteredImage.write("/filteredImage.bmp");
