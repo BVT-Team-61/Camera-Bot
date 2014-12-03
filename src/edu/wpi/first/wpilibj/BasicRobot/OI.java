@@ -16,7 +16,8 @@ public class OI {
    
    // Define Joystick Objects
    Joystick jLeft = new Joystick(RobotMap.leftStick);    
-   Joystick jRight = new Joystick(RobotMap.rightStick); 
+   Joystick jRight = new Joystick(RobotMap.rightStick);
+   Joystick jCam = new Joystick(RobotMap.camStick);
    
    // Define Joystick Buttons
    Button forwardButton = new JoystickButton (jRight,2);
@@ -50,6 +51,13 @@ public class OI {
     // Same thing but for the right joystick Y Axis.
     public double getRightSpeed() {
         return (jRight.getY());
+    }
+    
+    public double getServoVert(){
+        return (jCam.getY());
+    }
+    public double getServoHoriz(){
+        return (jCam.getX());
     }
 }
 

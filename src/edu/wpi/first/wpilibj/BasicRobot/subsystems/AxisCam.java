@@ -5,6 +5,7 @@
  */
 package edu.wpi.first.wpilibj.BasicRobot.subsystems;
 
+import edu.wpi.first.wpilibj.BasicRobot.RobotMap;
 import edu.wpi.first.wpilibj.BasicRobot.util.TargetReport;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.image.NIVision;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 import edu.wpi.first.wpilibj.image.RGBImage;
+import edu.wpi.first.wpilibj.Servo;
 
 /**
  *
@@ -48,6 +50,9 @@ public class AxisCam extends Subsystem {
     final int MAX_PARTICLES = 8;
 
     CriteriaCollection cc;      // the criteria for doing the particle filter operation
+   
+    Servo Vservo = new Servo(RobotMap.servoVert);
+    Servo Hservo = new Servo(RobotMap.servoHoriz);
     
     public class Scores {
         double rectangularity;
@@ -313,5 +318,14 @@ public class AxisCam extends Subsystem {
 
         return isHot;
     }
-
+    public void adjServo(double horiz, double vert){
+        servoVert(vert);
+        servoHoriz(horiz);
+    }
+    private void servoVert(double speed){
+        Vservo.set(speed);
+    }
+    private void servoHoriz(double speed){
+        Hservo.set(speed);
+    }
 }

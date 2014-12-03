@@ -10,9 +10,13 @@ public class RobotMap {
     //Joysticks
     public static final int leftStick = 1;
     public static final int rightStick = 2;
+    public static final int camStick = 3;
     
     //Motors
     public static final int leftMotor = 1; // Left motor in port 1
     public static final int rightMotor = 2; // Right motor in port 2
+    
+    public static final int servoVert = 5;
+    public static final int servoHoriz = 6;
   
 }
