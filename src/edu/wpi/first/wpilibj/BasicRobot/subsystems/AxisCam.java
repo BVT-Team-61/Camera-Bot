@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 import edu.wpi.first.wpilibj.image.RGBImage;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Relay.Value;
 
 /**
  *
@@ -30,8 +29,8 @@ public class AxisCam extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     
-    private double posV;
-    private double posH;
+    private double posV = 0.5;
+    private double posH = 0.5;
     //Camera constants used for distance calculation
     final int Y_IMAGE_RES = 480;		//X Image resolution in pixels, should be 120, 240 or 480
     //final double VIEW_ANGLE = 49;		//Axis M1013
@@ -45,7 +44,7 @@ public class AxisCam extends Subsystem {
 
     //Score limits used for hot target determination
     final int TAPE_WIDTH_LIMIT = 50;
-    final int  VERTICAL_SCORE_LIMIT = 50;
+    final int VERTICAL_SCORE_LIMIT = 50;
     final int LR_SCORE_LIMIT = 50;
 
     //Minimum area of particles to be considered
@@ -103,14 +102,15 @@ public class AxisCam extends Subsystem {
              *
              */
             ColorImage image = camera.getImage();     // comment if using stored images
+            image.write("/image.bmp");
             //ColorImage image;                           // next 2 lines read image from flash on cRIO
             //image = new RGBImage("/testImage.jpg");		// get the sample image from the cRIO flash
-            //BinaryImage thresholdImage = image.thresholdHSV(105, 137, 230, 255, 133, 183);   // keep only green objects
-            BinaryImage thresholdImage = image.thresholdHSV(210, 250, 75, 100, 110, 140);  // Red objects (bumpers?)
+            BinaryImage thresholdImage = image.thresholdHSV(105, 137, 230, 255, 133, 183);   // keep only green objects
+            //BinaryImage thresholdImage = image.thresholdHSV(210, 250, 75, 100, 110, 140);  // Red objects (bumpers?)
             //BinaryImage thresholdImage = image.thresholdHSV(80, 160, 200, 255, 200, 255); // Better Bumpers
-            //thresholdImage.write("/threshold.bmp");
+            thresholdImage.write("/threshold.bmp");
             BinaryImage filteredImage = thresholdImage.particleFilter(cc);           // filter out small particles
-            //filteredImage.write("/filteredImage.bmp");
+            filteredImage.write("/filteredImage.bmp");
 
             //iterate through each particle and score to see if it is a target
             Scores scores[] = new Scores[filteredImage.getNumberParticles()];
@@ -134,7 +134,7 @@ public class AxisCam extends Subsystem {
                         System.out.println("particle: " + i + "is a Vertical Target centerX: " + report.center_mass_x + "centerY: " + report.center_mass_y);
                         verticalTargets[verticalTargetCount++] = i;  //Add particle to target array and increment count
                     } else {
-                        System.out.println("particle: " + i + "is not a Target centerX: " + report.center_mass_x + "centerY: " + report.center_mass_y);
+                        //System.out.println("particle: " + i + "is not a Target centerX: " + report.center_mass_x + "centerY: " + report.center_mass_y);
                     }
                     System.out.println("rect: " + scores[i].rectangularity + "ARHoriz: " + scores[i].aspectRatioHorizontal);
                     System.out.println("ARVert: " + scores[i].aspectRatioVertical);
@@ -324,37 +324,65 @@ public class AxisCam extends Subsystem {
 
         return isHot;
     }
-    public void adjServo(double horiz, double vert){
+    
+    // Servo Control Functions
+    /** 
+     * Moves the servo at a specified velocity
+     * @param horizVel value -1 to 1
+     * @param vertVel 
+     */
+    public void moveServo(double horizVel, double vertVel){
+        double vertPos=posV+(vertVel/10); // Use joystick values to move position
+        double horizPos=posV+(horizVel/10);
+        setServoVert(vertPos);
+        setServoHoriz(horizPos);
+    }
+     /** 
+     * Moves the servo to a specified position
+     * @param horiz value -1 to 1
+     * @param vert value -1 to 1
+     */
+    public void setServo(double horiz, double vert){        
+        vert = (vert+1)/2; // Scale joystick values (-1 to 1) to servo values (0 to 1)
+        horiz = (horiz+1)/2;
         setServoVert(vert);
         setServoHoriz(horiz);
     }
-    public void setServoVert(double pos){
-        System.out.print("V"+pos+", ");        
-        posV = (pos+1)/2;
-        Vservo.set(posV);
-        System.out.println(posV);
-    }
-    public void setServoHoriz(double pos){
-        System.out.print("H"+pos+", ");
-        posH = (pos+1)/2;
-        Hservo.set(posH);
-        System.out.println(posH);
-    }
-    public void adjServoVert(double vel){
-        posV=posV+(vel/10);
+    
+    private void setServoVert(double pos){
+        posV = pos;
+        if(posV >= 1) posV = 1;
+        if(posV <= 0) posV = 0;
         Vservo.set(posV);
     }
-    public void adjServoHoriz(double vel){
-        posH=posH+(vel/10);
+    private void setServoHoriz(double pos){
+        posH = pos;
+        if(posH >= 1) posH = 1;
+        if(posH <= 0) posH = 0;
         Hservo.set(posH);
-    }
-    public void lightSwitch(){               
-        if (LightRelay.get()==Relay.Value.kOn){
-            LightRelay.set(Value.kOff);
-        }
-        else if (LightRelay.get()==Relay.Value.kOff){
-            LightRelay.set(Value.kOn);
-        }
     }
     
+    // Light Ring Control
+    /**
+     * Toggles the state of the light.
+     */
+    public void lightSwitch(){               
+        if (LightRelay.get()==Relay.Value.kOff){
+            lightOn();
+        } else {
+            lightOff();
+        }
+    }
+    /**
+     * Turns off the light
+     */
+    public void lightOn(){               
+        LightRelay.set(Relay.Value.kOn);
+    }
+    /**
+     * Turns on the light
+     */
+    public void lightOff(){               
+        LightRelay.set(Relay.Value.kOff);
+    }
 }

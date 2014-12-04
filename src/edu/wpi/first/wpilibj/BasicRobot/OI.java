@@ -13,17 +13,17 @@ import edu.wpi.first.wpilibj.BasicRobot.RobotMap;
  */
 public class OI {   
 
-   private static boolean reverseDriveMode=false ;
-   
+   private static boolean reverseDriveMode=false;
+   private static boolean absoluteServoControl=false;
    // Define Joystick Objects
    Joystick jLeft = new Joystick(RobotMap.leftStick);    
    Joystick jRight = new Joystick(RobotMap.rightStick);
    Joystick jCam = new Joystick(RobotMap.camStick);
    
    // Define Joystick Buttons
-   Button forwardButton = new JoystickButton (jRight,2);
    Button reverseButton = new JoystickButton (jRight,1);
    Button lightButton = new JoystickButton (jCam,1);
+   Button absoluteButton = new JoystickButton (jCam,2);
    
    public OI(){
        lightButton.whenPressed(new LightToggle());
@@ -35,18 +35,22 @@ public class OI {
     
     // Determines if robot in reverse.
     public boolean weAreReversing (){
-        // If the reverse button is hit, then we are reversing.
+        // If the reverse button is hit, swap the value.
         if (reverseButton.get()) {
-            reverseDriveMode = false;
-        }
-        // If the forward button is hit, then we are not reversing.
-        else if (forwardButton.get()) {
-            reverseDriveMode= true;
+            reverseDriveMode = !reverseDriveMode;
         }
         // Otherwise, just return whatever it was before
         return reverseDriveMode ;
     }
     
+    public boolean absoluteServoMode() {
+        // If the absolute button is hit, swap the value.
+        if (absoluteButton.get()) {
+            absoluteServoControl = !absoluteServoControl;
+        }
+        // Otherwise, just return whatever it was before
+        return absoluteServoControl;
+    }
     // Method to return the left joystick Y Axis.
     public double getLeftSpeed() {
         return (jLeft.getY()); 

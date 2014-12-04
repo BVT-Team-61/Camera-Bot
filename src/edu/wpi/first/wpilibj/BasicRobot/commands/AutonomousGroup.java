@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class AutonomousGroup extends CommandGroup {
     
-    public AutonomousGroup() {        
+    public AutonomousGroup() {
+        addSequential(new LightOn());
         addSequential(new DriveWhenHot());
+        addSequential(new LightOff());
     }
 }

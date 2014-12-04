@@ -5,18 +5,16 @@
  */
 package edu.wpi.first.wpilibj.BasicRobot.commands;
 
-import edu.wpi.first.wpilibj.BasicRobot.RobotMap;
-import edu.wpi.first.wpilibj.Servo;
-
 /**
  *
  * @author OAmour
  */
-public class MoveServo extends CommandBase {
-   
-    public MoveServo() {
+public class LightOff extends CommandBase {
+    
+    public LightOff() {
         // Use requires() here to declare subsystem dependencies
         requires(axiscam);
+        setTimeout(1);
     }
 
     // Called just before this Command runs the first time
@@ -25,16 +23,12 @@ public class MoveServo extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-       if (oi.absoluteServoMode()){
-         axiscam.setServo(oi.getServoVert(),oi.getServoHoriz());
-       } else {
-         axiscam.moveServo(oi.getServoVert(),oi.getServoHoriz());
-       }        
+        axiscam.lightOff();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true
