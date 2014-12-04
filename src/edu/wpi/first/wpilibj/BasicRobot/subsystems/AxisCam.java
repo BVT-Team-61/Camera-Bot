@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 import edu.wpi.first.wpilibj.image.RGBImage;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Relay.Value;
 
 /**
  *
@@ -54,6 +56,7 @@ public class AxisCam extends Subsystem {
    
     private Servo Vservo = new Servo(RobotMap.servoVert);
     private Servo Hservo = new Servo(RobotMap.servoHoriz);
+    private Relay LightRelay = new Relay(RobotMap.lightRelay);
     
     public class Scores {
         double rectangularity;
@@ -324,7 +327,7 @@ public class AxisCam extends Subsystem {
         servoHoriz(horiz);
     }
     public void servoVert(double pos){
-        System.out.print("V"+pos+", ");
+        System.out.print("V"+pos+", ");        
         pos = (pos+1)/2;
         Vservo.set(pos);
         System.out.println(pos);
@@ -335,4 +338,13 @@ public class AxisCam extends Subsystem {
         Hservo.set(pos);
         System.out.println(pos);
     }
+    public void lightSwitch(){               
+        if (LightRelay.get()==Relay.Value.kOn){
+            LightRelay.set(Value.kOff);
+        }
+        else if (LightRelay.get()==Relay.Value.kOff){
+            LightRelay.set(Value.kOn);
+        }
+    }
+    
 }

@@ -18,5 +18,8 @@ public class RobotMap {
     
     public static final int servoVert = 5;
     public static final int servoHoriz = 6;
+    
+    //Digital IO
+    public static final int lightRelay = 7;
   
 }

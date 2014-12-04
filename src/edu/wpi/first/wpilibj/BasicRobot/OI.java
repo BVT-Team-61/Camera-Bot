@@ -4,6 +4,7 @@ package edu.wpi.first.wpilibj.BasicRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.BasicRobot.commands.LightToggle;
 import edu.wpi.first.wpilibj.BasicRobot.RobotMap;
 
 /**
@@ -22,8 +23,11 @@ public class OI {
    // Define Joystick Buttons
    Button forwardButton = new JoystickButton (jRight,2);
    Button reverseButton = new JoystickButton (jRight,1);
+   Button lightButton = new JoystickButton (jCam,1);
    
-   
+   public OI(){
+       lightButton.whenPressed(new LightToggle());
+   }
     // Placeholder method. Does nothing yet.
     public boolean weAreDriving() {
         return true;
@@ -59,5 +63,8 @@ public class OI {
     public double getServoHoriz(){
         return (jCam.getY()*2/3);
     }
+//    public boolean lightSetting(){
+//        return true;
+//    }
 }
 
