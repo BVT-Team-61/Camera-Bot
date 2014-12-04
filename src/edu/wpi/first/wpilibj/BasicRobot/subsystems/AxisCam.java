@@ -6,6 +6,7 @@
 package edu.wpi.first.wpilibj.BasicRobot.subsystems;
 
 import edu.wpi.first.wpilibj.BasicRobot.RobotMap;
+import edu.wpi.first.wpilibj.BasicRobot.commands.MoveServo;
 import edu.wpi.first.wpilibj.BasicRobot.util.TargetReport;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
@@ -51,8 +52,8 @@ public class AxisCam extends Subsystem {
 
     CriteriaCollection cc;      // the criteria for doing the particle filter operation
    
-    Servo Vservo = new Servo(RobotMap.servoVert);
-    Servo Hservo = new Servo(RobotMap.servoHoriz);
+    private Servo Vservo = new Servo(RobotMap.servoVert);
+    private Servo Hservo = new Servo(RobotMap.servoHoriz);
     
     public class Scores {
         double rectangularity;
@@ -71,7 +72,7 @@ public class AxisCam extends Subsystem {
     
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
+        setDefaultCommand(new MoveServo());
     }
 
     public boolean hotTargetFound() {
@@ -322,10 +323,16 @@ public class AxisCam extends Subsystem {
         servoVert(vert);
         servoHoriz(horiz);
     }
-    private void servoVert(double speed){
-        Vservo.set(speed);
+    public void servoVert(double pos){
+        System.out.print("V"+pos+", ");
+        pos = (pos+1)/2;
+        Vservo.set(pos);
+        System.out.println(pos);
     }
-    private void servoHoriz(double speed){
-        Hservo.set(speed);
+    public void servoHoriz(double pos){
+        System.out.print("H"+pos+", ");
+        pos = (pos+1)/2;
+        Hservo.set(pos);
+        System.out.println(pos);
     }
 }

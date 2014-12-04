@@ -6,13 +6,15 @@
 package edu.wpi.first.wpilibj.BasicRobot.commands;
 
 import edu.wpi.first.wpilibj.BasicRobot.RobotMap;
+import edu.wpi.first.wpilibj.Servo;
 
 /**
  *
  * @author OAmour
  */
 public class MoveServo extends CommandBase {
-    
+   
+    //public Servo Vservo = new Servo(RobotMap.servoVert);
     public MoveServo() {
         // Use requires() here to declare subsystem dependencies
         requires(axiscam);
@@ -24,7 +26,10 @@ public class MoveServo extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        axiscam.adjServo(oi.getServoHoriz(),oi.getServoVert());
+       axiscam.adjServo(oi.getServoVert(),oi.getServoHoriz());
+       // Vservo.set((oi.jCam.getY()));
+        //Vservo.setAngle(-1);
+        
     }
 
     // Make this return true when this Command no longer needs to run execute()

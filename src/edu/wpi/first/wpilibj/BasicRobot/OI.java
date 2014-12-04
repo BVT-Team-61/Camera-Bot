@@ -54,10 +54,10 @@ public class OI {
     }
     
     public double getServoVert(){
-        return (jCam.getY());
+        return (jCam.getX()*2/3);
     }
     public double getServoHoriz(){
-        return (jCam.getX());
+        return (jCam.getY()*2/3);
     }
 }
 
