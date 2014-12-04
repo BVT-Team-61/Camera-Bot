@@ -30,6 +30,8 @@ public class AxisCam extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     
+    private double posV;
+    private double posH;
     //Camera constants used for distance calculation
     final int Y_IMAGE_RES = 480;		//X Image resolution in pixels, should be 120, 240 or 480
     //final double VIEW_ANGLE = 49;		//Axis M1013
@@ -323,20 +325,28 @@ public class AxisCam extends Subsystem {
         return isHot;
     }
     public void adjServo(double horiz, double vert){
-        servoVert(vert);
-        servoHoriz(horiz);
+        setServoVert(vert);
+        setServoHoriz(horiz);
     }
-    public void servoVert(double pos){
+    public void setServoVert(double pos){
         System.out.print("V"+pos+", ");        
-        pos = (pos+1)/2;
-        Vservo.set(pos);
-        System.out.println(pos);
+        posV = (pos+1)/2;
+        Vservo.set(posV);
+        System.out.println(posV);
     }
-    public void servoHoriz(double pos){
+    public void setServoHoriz(double pos){
         System.out.print("H"+pos+", ");
-        pos = (pos+1)/2;
-        Hservo.set(pos);
-        System.out.println(pos);
+        posH = (pos+1)/2;
+        Hservo.set(posH);
+        System.out.println(posH);
+    }
+    public void adjServoVert(double vel){
+        posV=posV+(vel/10);
+        Vservo.set(posV);
+    }
+    public void adjServoHoriz(double vel){
+        posH=posH+(vel/10);
+        Hservo.set(posH);
     }
     public void lightSwitch(){               
         if (LightRelay.get()==Relay.Value.kOn){
